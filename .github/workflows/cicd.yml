@@ -45,7 +45,6 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-          cache: maven
       - name: Unit Test Cases
         run: |
 #          mvn validate
