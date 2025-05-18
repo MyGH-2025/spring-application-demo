@@ -48,13 +48,13 @@ jobs:
           cache: maven
       - name: Unit Test Cases
         run: |
-          mvn validate 
-          mvn compile 
-          mvn test 
-          mvn package
-          mvn verify
+#          mvn validate
+#          mvn compile
+#          mvn test
+#          mvn package
+#          mvn verify
           mvn install
-          mvn deploy
+#          mvn deploy
 
 #      - name: Maven Build
 #        run: mvn install
