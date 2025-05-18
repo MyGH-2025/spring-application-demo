@@ -21,13 +21,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3 #todo new version -> actions/checkout@v4
+        uses: actions/checkout@v4 #todo new version -> actions/checkout@v4
         with:
           token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           fetch-depth: 0
 
       - name: Set up JDK 17
-        uses: actions/setup-java@v3 #todo new version --> actions/setup-java@v4
+        uses: actions/setup-java@v4 #todo new version --> actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
@@ -37,7 +37,7 @@ jobs:
 
   Test-Maven:
     runs-on: ubuntu-latest
-    needs: Compile
+    needs: build
     steps:
       - uses: actions/checkout@v4
       - name: Set up JDK 17
@@ -45,14 +45,15 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+          cache: maven
       - name: Unit Test Cases
-        run: |
+        run: mvn install
 #          mvn validate
 #          mvn compile
 #          mvn test
 #          mvn package
 #          mvn verify
-          mvn install
+#          mvn install
 #          mvn deploy
 
 #      - name: Maven Build
