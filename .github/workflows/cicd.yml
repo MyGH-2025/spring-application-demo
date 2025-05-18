@@ -1,0 +1,29 @@
+#name: GitOps Pipeline with ArgoCD
+#
+#on:
+#  push:
+#    branches:
+#      - main
+#    paths-ignore:
+#      - 'k8s-manifest' # todo ignore changes to manifest files to prevent loop
+#  pull_request:
+#    branches:
+#      - main
+#
+#env:
+#  PERSONAL_ACCESS_TOKEN: ${{secrets.PERSONAL_ACCESS_TOKEN}}
+#
+#
+#jobs:
+#  build:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout code
+#        uses: actions/checkout@v3
+#        with:
+#          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+#          fetch-depth: 0
+#
+#
+#
+#
