@@ -2,7 +2,7 @@ name: Spring boot Java CI CD with Docker
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "master" ]
 
 jobs:
   Compile:
