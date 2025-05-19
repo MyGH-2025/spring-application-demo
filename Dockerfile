@@ -13,7 +13,7 @@ FROM openjdk:17-jdk-slim
 # Step 2: Set working directory inside the container
 WORKDIR /app
 # Step 3: Copy the JAR file from the host to the container
-COPY target/spring-application.jar spring-application.jar
+COPY target/spring-application spring-application.jar
 # Step 4: Expose the application port
 EXPOSE  2255
 # Step 5: Run the Spring Boot application
