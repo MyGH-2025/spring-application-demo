@@ -68,7 +68,7 @@ jobs:
 
       # Push image to DockerHub
       - name: Push image to DockerHub
-      - uses: docker/login-action@v4
+      - uses: docker/login-action@v3 # todo docker/login-action@v4 not working don't try
         run: |
           docker build -t spring-application .
           docker tag spring-application ${{ secrets.DOCKERHUB_USERNAME }}/spring-application:V1.01
