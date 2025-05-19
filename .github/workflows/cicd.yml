@@ -76,8 +76,8 @@ jobs:
 #      - name: Tag Docker image to DockerHub
 #        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/spring-application:${{ github.sha }
 
-      - name: Push Docker image to DockerHub
-        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/spring-application:${{ github.sha }
+#      - name: Push Docker image to DockerHub
+#        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/spring-application:${{ github.sha }
 
 #      - name: Log in to DockerHub
 #        run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
