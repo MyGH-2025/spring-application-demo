@@ -121,6 +121,9 @@ jobs:
           docker build -t spring-application .
           docker tag spring-application srinu641/spring-application:v0.0
           docker push srinu641/spring-application:v0.0
+          docker images
+          docker ps
+          docker ps -a
 
   #          docker push ${{ secrets.DOCKERHUB_USERNAME }}/spring-application:V1.01
 
