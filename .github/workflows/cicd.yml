@@ -67,12 +67,12 @@ jobs:
     runs-on: ubuntu-latest
 #    needs: maven-checkOut
     steps:
-      - uses: actions/checkout@v4
-      - name: Download JAR artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: spring-application
-          path: app  # this will download JAR to ./app folder
+#      - uses: actions/checkout@v4
+#      - name: Download JAR artifact
+#        uses: actions/download-artifact@v4
+#        with:
+#          name: spring-application
+#          path: app  # this will download JAR to ./app folder
 
       - name: Login to Docker Hub
         uses: docker/login-action@v3
