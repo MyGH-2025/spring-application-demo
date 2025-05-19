@@ -21,7 +21,7 @@ jobs:
 
   java-checkOut:
     runs-on: ubuntu-latest
-    needs: build
+#    needs: build
     steps:
       - uses: actions/checkout@v4
       - name: Set up JDK 11
@@ -65,7 +65,7 @@ jobs:
 
   buils_docker_image_and_push:
     runs-on: ubuntu-latest
-    needs: maven-checkOut
+#    needs: maven-checkOut
     steps:
       - uses: actions/checkout@v4
       - name: Download JAR artifact
@@ -91,8 +91,26 @@ jobs:
           tags: srinu641/spring-application:V1.0
           file: ./Dockerfile
 
+  deploy:
+    #    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          fetch-depth: 0  # get all history of all branches and tags
 
+      - name: Install kubectl
+        run: |
+          curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/1.30.7/2024-12-12/bin/linux/amd64/kubectl
+          chmod +x ./kubectl
+          sudo mv ./kubectl /usr/local/bin/kubectl
 
-
+      - name: Install ArgoCD CLI
+        run: |
+          curl -sSL -o argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
+          chmod +x argocd
+          sudo mv argocd /usr/local/bin/argocd
 
 ---
