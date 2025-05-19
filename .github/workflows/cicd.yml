@@ -116,10 +116,6 @@ jobs:
           chmod +x argocd
           sudo mv argocd /usr/local/bin/argocd
 
-artifacts:
-  files:
-    - '**/*'
-  base-directory: ../spring-application
 ---
 
 #Error
