@@ -68,10 +68,24 @@ jobs:
 
       # Push image to DockerHub
       - name: Push image to DockerHub
-        run: |
-          docker build -t spring-application .
-          docker tag spring-application ${{ secrets.DOCKERHUB_USERNAME }}/spring-application:V1.01
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/spring-application:V1.01
+        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/spring-application:${{ github.sha }} .
+
+      - name: Scan Docker Image with Trivy
+        run: docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy:latest image ${{ secrets.DOCKERHUB_USERNAME }}/spring-application:${{ github.sha }}
+
+#      - name: Tag Docker image to DockerHub
+#        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/spring-application:${{ github.sha }
+
+      - name: Push Docker image to DockerHub
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/spring-application:${{ github.sha }
+
+#      - name: Log in to DockerHub
+#        run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+
+#        run: |
+#          docker build -t spring-application .
+#          docker tag spring-application ${{ secrets.DOCKERHUB_USERNAME }}/spring-application:V1.01
+#          docker push ${{ secrets.DOCKERHUB_USERNAME }}/spring-application:V1.01
 
   deploy:
     #    needs: build
@@ -102,6 +116,10 @@ jobs:
           chmod +x argocd
           sudo mv argocd /usr/local/bin/argocd
 
+artifacts:
+  files:
+    - '**/*'
+  base-directory: ../spring-application
 ---
 
 #Error
