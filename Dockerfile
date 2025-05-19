@@ -3,9 +3,9 @@ COPY . .
 RUN mvn clean package -DskipTests
 
 FROM openjdk:17 AS builder
-COPY --from=build /target/spring-application.jar spring-application.jar
+COPY --from=build /target/spring-application-github.jar spring-application-github.jar
 EXPOSE 2255
-ENTRYPOINT ["java", "-jar", "spring-application.jar"]
+ENTRYPOINT ["java", "-jar", "spring-application-github.jar"]
 
 
 # # Step 1: Use official OpenJDK as base image
