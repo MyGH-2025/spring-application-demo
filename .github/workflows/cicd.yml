@@ -44,6 +44,13 @@ jobs:
       - name: Build with Maven
         run: mvn -B package --file pom.xml
 
+      # todo SonarQube Analysis
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
   docker:
     runs-on: ubuntu-latest
     steps:
@@ -66,11 +73,11 @@ jobs:
           java-version: '17'
           distribution: 'adopt'
 
-      - name: Push image to DockerHub
-        run: |
-          docker build -t spring-application .
-          docker tag spring-application ${{ secrets.DOCKERHUB_USERNAME }}/spring-application:V1.01
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/spring-application:V1.01
+#      - name: Push image to DockerHub
+#        run: |
+#          docker build -t spring-application .
+#          docker tag spring-application ${{ secrets.DOCKERHUB_USERNAME }}/spring-application:V1.01
+#          docker push ${{ secrets.DOCKERHUB_USERNAME }}/spring-application:V1.01
 
   k8s-deploy:
     #    needs: build
