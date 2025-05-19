@@ -66,11 +66,15 @@ jobs:
           java-version: '17'
           distribution: 'adopt'
 
-      # Push image to DockerHub
-      - name: Push image to DockerHub
+#      # Push image to DockerHub
+#      - name: Push image to DockerHub
+#        run: |
+#          docker build -t spring-application .
+#          docker tag spring-application ${{ secrets.DOCKERHUB_USERNAME }}/spring-application:V1.01
+#          docker push ${{ secrets.DOCKERHUB_USERNAME }}/spring-application:V1.01
+      - name: Build and Push Docker Image
         run: |
-          docker build -t spring-application .
-          docker tag spring-application ${{ secrets.DOCKERHUB_USERNAME }}/spring-application:V1.01
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/spring-application:V1.01 .
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/spring-application:V1.01
 
   deploy:
