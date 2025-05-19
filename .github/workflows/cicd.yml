@@ -79,6 +79,8 @@ jobs:
            sudo docker images
            
           EOF
+      - name: List Of Docker Images
+        run: docker images
 
   #  sonarqube:
   #    runs-on: ubuntu-latest
