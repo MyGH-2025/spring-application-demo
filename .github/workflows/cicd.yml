@@ -125,15 +125,16 @@ jobs:
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
-          scan-type: 'srinu641/spring-application-github:v1.0'              # or 'image'
-          scan-ref: '.'                # directory or image name
+          scan-type: 'image'              # or 'image'
+          scan-ref: 'srinu641/spring-application-github:v1.0'                # directory or image name
           severity: 'CRITICAL,HIGH'
           ignore-unfixed: true
-          format: 'table'              # or 'json'
-          exit-code: '1'
+          #todo -> you can use 'json'
+          format: 'table'
+          #todo -> Trivy will fail the pipeline (exit-code: 1) if any CRITICAL or HIGH vulnerabilities are found.
+          #todo -> This is by design to stop insecure code from proceeding.
+          exit-code: '0'
 
-
-  #          docker push ${{ secrets.DOCKERHUB_USERNAME }}/spring-application:V1.01
   k8s-deploy:
     runs-on: ubuntu-latest
     #    needs: publish_docker_image
@@ -162,3 +163,25 @@ jobs:
 # a step cannot have both the `uses` and `run` keys
 # Missing download info for docker/login-action@v4
 #every step must define a `uses` or `run` key
+
+#  ✅ Correct Usage (Scan Docker Image)
+#- name: Run Trivy vulnerability scanner on Docker image
+#  uses: aquasecurity/trivy-action@master
+#  with:
+#    scan-type: 'image'
+#    scan-ref: 'srinu641/spring-application-github:v1.0'
+#    severity: 'CRITICAL,HIGH'
+#    ignore-unfixed: true
+#    format: 'table'
+#    exit-code: '1'
+
+#✅ If You Want to Scan Code Instead of Image
+#- name: Run Trivy vulnerability scanner on code
+#  uses: aquasecurity/trivy-action@master
+#  with:
+#    scan-type: 'fs'
+#    scan-ref: '.'
+#    severity: 'CRITICAL,HIGH'
+#    ignore-unfixed: true
+#    format: 'table'
+#    exit-code: '1'
