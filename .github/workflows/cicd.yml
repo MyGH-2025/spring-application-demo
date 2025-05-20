@@ -125,7 +125,7 @@ jobs:
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
-          scan-type: 'fs'              # or 'image'
+          scan-type: 'srinu641/spring-application-github:v1.0'              # or 'image'
           scan-ref: '.'                # directory or image name
           severity: 'CRITICAL,HIGH'
           ignore-unfixed: true
