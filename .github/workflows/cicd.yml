@@ -120,7 +120,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Pull docker image
-        run: docker pull spring-application-github:v1.0
+        run: docker pull srinu641/spring-application-github:v1.0
 
       - uses: lazy-actions/gitrivy@v3
         with:
