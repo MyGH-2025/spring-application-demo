@@ -115,15 +115,16 @@ jobs:
           sudo apt-get install trivy    
 
   trivy-scan:
+    name: trivy-scan
     runs-on: ubuntu-latest
     steps:
-      - name: Pull docker image
-        run: docker pull srinu641/spring-application-github:v1.0
-
-      - uses: lazy-actions/gitrivy@v3
+      - uses: actions/checkout@v2
+      - name: Run Trivy
+        uses: anvayacloud/trivy-action@v0.0.2
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          image: srinu641/spring-application-github:v1.0
+          image_name:
+          format:
+
   #          docker push ${{ secrets.DOCKERHUB_USERNAME }}/spring-application:V1.01
   k8s-deploy:
     runs-on: ubuntu-latest
