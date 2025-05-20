@@ -19,9 +19,9 @@ jobs:
           token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           fetch-depth: 0
 
-  java-check-out:
+  setup-jdk:
     runs-on: ubuntu-latest
-#    needs: maven-build
+    #    needs: maven-build
     steps:
       - uses: actions/checkout@v4
       - name: Set up JDK 11
@@ -30,60 +30,63 @@ jobs:
           java-version: '21'
           distribution: 'adopt'
 
-  integration-test:
+  run-unit-tests:
     runs-on: ubuntu-latest
-#    needs: java-check-out
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '21'
-          cache: 'maven'
-      #          cache-dependency-path: 'sub-project/pom.xml' # optional
-      - name: Build with Maven
-        run: mvn -B package --file pom.xml
+      - name: Checkout
+        uses: actions/checkout@v3
 
-      - name: Set Up Maven
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+          distribution: 'adopt'
+
+      - name: Setup Maven
         uses: stCarolas/setup-maven@v4.4
         with:
           maven-version: 3.8.2
 
-      - name: Unit Test
+      - name: Unit Tests
         run: mvn clean package
 
       - name: Rename the artifact
-        run: |
-#         cp target/spring-application.jar spring-application-${{github.sha}}.jar
-         mkdir -p ${{ github.workspace }}/artifact
-         echo hello > ${{ github.workspace }}/artifact/world.txt
-      - uses: actions/upload-artifact@v4
-        with:
-          name: ${{ env.name }}-name
-          path: ${{ github.workspace }}/artifact/**/*
-#
-#      - name: save the artifact
-#        uses: actions/upload-artifact@v4
-#        with:
-#          name: spring-application
-#          path: spring-application-${{github.sha}}.jar
+        run: cp target/spring-application-github.jar spring-application-github-${{ github.sha }}.jar
 
-#    sonarqube:
-#      runs-on: ubuntu-latest
-#      steps:
-#        - uses: actions/checkout@v4
-#          with:
-#            # Disabling shallow clones is recommended for improving the relevancy of reporting
-#            fetch-depth: 0
-#        - name: SonarQube Scan
-#          uses: SonarSource/sonarqube-scan-action@v5.2.0 # Ex: v4.1.0, See the latest version at https://github.com/marketplace/actions/official-sonarqube-scan
-#          env:
-#            SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-#            SONAR_HOST_URL: ${{ vars.SONAR_HOST_URL }}
+      - name: Save the artifact
+        uses: actions/upload-artifact@master
+        with:
+          name: spring-application-github
+          path: spring-application-github-${{ github.sha }}.jar
+
+  fake-deploy:
+    runs-on: ubuntu-latest
+    needs: run-unit-tests
+    steps:
+      - name: Get the artifact
+        uses: actions/download-artifact@master
+        with:
+          name: spring-application-github
+      - name: Fake deploy
+        run: ls spring-application-github-*.jar
+
+
+  #    sonarqube:
+  #      runs-on: ubuntu-latest
+  #      steps:
+  #        - uses: actions/checkout@v4
+  #          with:
+  #            # Disabling shallow clones is recommended for improving the relevancy of reporting
+  #            fetch-depth: 0
+  #        - name: SonarQube Scan
+  #          uses: SonarSource/sonarqube-scan-action@v5.2.0 # Ex: v4.1.0, See the latest version at https://github.com/marketplace/actions/official-sonarqube-scan
+  #          env:
+  #            SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  #            SONAR_HOST_URL: ${{ vars.SONAR_HOST_URL }}
 
   publish_docker_image:
     runs-on: ubuntu-latest
-#    needs: sonarqube-install
+    #    needs: sonarqube-install
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -97,30 +100,30 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Set up JDK 11
-        uses: actions/setup-java@v4
-        with:
-          java-version: '17'
-          distribution: 'adopt'
+      #      - name: Set up JDK 11
+      #        uses: actions/setup-java@v4
+      #        with:
+      #          java-version: '17'
+      #          distribution: 'adopt'
 
       - name: Push image to DockerHub
         run: |
-          docker build -t spring-application .
-          docker tag spring-application srinu641/spring-application:v0.0
-          docker push srinu641/spring-application:v0.0
+          docker build -t spring-application-github .
+          docker tag spring-application-github srinu641/spring-application-github:v1.0
+          docker push srinu641/spring-application-github:10.0
 
       - name: List Of Docker Images
         run: |
-         docker images
-         docker ps -a
-         docker ps 
-          
+          docker images
+          docker ps -a
+          docker ps 
+  
 
   #          docker push ${{ secrets.DOCKERHUB_USERNAME }}/spring-application:V1.01
 
   k8s-deploy:
     runs-on: ubuntu-latest
-#    needs: publish_docker_image
+    #    needs: publish_docker_image
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
