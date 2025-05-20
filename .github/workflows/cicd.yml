@@ -110,7 +110,7 @@ jobs:
         run: |
           docker build -t spring-application-github .
           docker tag spring-application-github srinu641/spring-application-github:v1.0
-          docker push srinu641/spring-application-github:10.0
+          docker push srinu641/spring-application-github:v1.0
 
       - name: List Of Docker Images
         run: |
