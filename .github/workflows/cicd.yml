@@ -114,15 +114,24 @@ jobs:
           sudo apt-get update
           sudo apt-get install trivy    
 
-  trivy-scan:
-#    name: trivy-scan
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Run Trivy
-        uses: anvayacloud/trivy-action@v0.0.2
+      # Scan source code (e.g., for vulnerabilities in dependencies)
+      - name: Trivy FS Scan (source code)
+        run: trivy fs --exit-code 1 --severity CRITICAL,HIGH .
+
+      # OR scan the Docker image
+      - name: Trivy Image Scan
+        run: trivy image --exit-code 1 --severity CRITICAL,HIGH srinu641/spring-application-github:v1.0
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
         with:
-          image_name: spring-application-github:v1.0
+          scan-type: 'fs'              # or 'image'
+          scan-ref: '.'                # directory or image name
+          severity: 'CRITICAL,HIGH'
+          ignore-unfixed: true
+          format: 'table'              # or 'json'
+          exit-code: '1'
+
 
   #          docker push ${{ secrets.DOCKERHUB_USERNAME }}/spring-application:V1.01
   k8s-deploy:
