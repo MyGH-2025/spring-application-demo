@@ -54,7 +54,7 @@ jobs:
         run: cp target/spring-application-github.jar spring-application-github-${{ github.sha }}.jar
 
       - name: Save the artifact
-        uses: actions/upload-artifact@master
+        uses: actions/toolkit-upload-artifact@master
         with:
           name: spring-application-github
           path: spring-application-github-${{ github.sha }}.jar
