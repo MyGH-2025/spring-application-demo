@@ -122,18 +122,28 @@ jobs:
       - name: Trivy Image Scan
         run: trivy image --exit-code 1 --severity CRITICAL,HIGH srinu641/spring-application-github:v1.0
 
-      - name: Run Trivy vulnerability scanner
+      - name: Run Trivy vulnerability scanner on code
         uses: aquasecurity/trivy-action@master
         with:
-          scan-type: 'image'              # or 'image'
-          scan-ref: 'srinu641/spring-application-github:v1.0'                # directory or image name
+          scan-type: 'fs'
+          scan-ref: '.'
           severity: 'CRITICAL,HIGH'
           ignore-unfixed: true
-          #todo -> you can use 'json'
           format: 'table'
-          #todo -> Trivy will fail the pipeline (exit-code: 1) if any CRITICAL or HIGH vulnerabilities are found.
-          #todo -> This is by design to stop insecure code from proceeding.
-          exit-code: '0'
+          exit-code: '1'
+
+  #      - name: Run Trivy vulnerability scanner
+#        uses: aquasecurity/trivy-action@master
+#        with:
+#          scan-type: 'image'              # or 'image'
+#          scan-ref: 'srinu641/spring-application-github:v1.0'                # directory or image name
+#          severity: 'CRITICAL,HIGH'
+#          ignore-unfixed: true
+#          #todo -> you can use 'json'
+#          format: 'table'
+#          #todo -> Trivy will fail the pipeline (exit-code: 1) if any CRITICAL or HIGH vulnerabilities are found.
+#          #todo -> This is by design to stop insecure code from proceeding.
+#          exit-code: '0'
 
   k8s-deploy:
     runs-on: ubuntu-latest
