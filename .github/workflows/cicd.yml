@@ -114,13 +114,19 @@ jobs:
           sudo apt-get update
           sudo apt-get install trivy    
             - uses: lazy-actions/gitrivy@v3
+
+  trivy-scan:
+    name: Daily Vulnerability Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pull docker image
+        run: docker pull spring-application-github:v1.0
+
+      - uses: lazy-actions/gitrivy@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           image: spring-application-github:v1.0
-
-
   #          docker push ${{ secrets.DOCKERHUB_USERNAME }}/spring-application:V1.01
-
   k8s-deploy:
     runs-on: ubuntu-latest
     #    needs: publish_docker_image
