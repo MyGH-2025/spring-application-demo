@@ -113,6 +113,10 @@ jobs:
           echo "deb [signed-by=/usr/share/keyrings/trivy.gpg] https://aquasecurity.github.io/trivy-repo/deb generic main" | sudo tee -a /etc/apt/sources.list.d/trivy.list
           sudo apt-get update
           sudo apt-get install trivy    
+            - uses: lazy-actions/gitrivy@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          image: spring-application-github:v1.0
 
 
   #          docker push ${{ secrets.DOCKERHUB_USERNAME }}/spring-application:V1.01
